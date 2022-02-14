@@ -5,11 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.notice.entity.User;
-import com.example.notice.oauth.google.GoogleOAuth;
+import com.example.notice.google.oauth.GoogleOAuth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class TestController {
 		log.info("code받고 엑세스토큰 받는 과정");
 		User user = googleOAuth.getAccessToken(code);
 		model.addAttribute("user", user);
-		return "home/page";
+		return "home/name";
 	}
 
 }

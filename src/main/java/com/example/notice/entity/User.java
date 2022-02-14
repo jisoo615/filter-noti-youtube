@@ -14,7 +14,8 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	int id;
 	
-	String name;
+	String title;
+	String channelId;
 	String email;
 	String accessToken;
 	String refreshToken;

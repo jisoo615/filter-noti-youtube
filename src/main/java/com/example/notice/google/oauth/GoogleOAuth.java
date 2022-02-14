@@ -1,4 +1,4 @@
-package com.example.notice.oauth.google;
+package com.example.notice.google.oauth;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -18,11 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.example.notice.entity.User;
+import com.example.notice.google.dto.Channel;
 import com.example.notice.repository.UserRepository;
+import com.example.restaurant.naver.dto.SearchLocalRes;
+import com.fasterxml.jackson.databind.AnnotationIntrospector.ReferenceProperty.Type;
 
 import io.swagger.annotations.Info;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.spring.web.plugins.DefaultResponseTypeReader;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -81,5 +85,19 @@ public class GoogleOAuth {
 		System.out.println(responseEntity.getStatusCode().toString());
 		
 		return user;
+	}
+	
+	public void getMyChannel(User user) {
+		String uri = UriComponentsBuilder.fromUriString("https://www.googleapis.com/youtube/v3/channels")
+				.queryParam("part", "snippet")
+				.queryParam("mine", "true")
+				.build()
+				.encode()
+				.toUriString();
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "Bearer "+user.getAccessToken());
+		var httpEntity = new HttpEntity<>(headers);
+		var responseType = new ParameterizedTypeReference<Channel>() {};
+		var responseEntity = new RestTemplate().exchange(uri, HttpMethod.POST, httpEntity, responseType);
 	}
 }

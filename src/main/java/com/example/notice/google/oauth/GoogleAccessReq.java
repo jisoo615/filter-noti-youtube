@@ -1,4 +1,4 @@
-package com.example.notice.oauth.google;
+package com.example.notice.google.oauth;
 
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
