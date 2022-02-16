@@ -35,7 +35,14 @@ public class TestController {
 		log.info("code받고 엑세스토큰 받는 과정");
 		User user = googleOAuth.getAccessToken(code);
 		model.addAttribute("user", user);
-		return "home/name";
+		return "home/page/"+user.getId();
+	}
+	
+	@GetMapping("page/{id}")
+	public String page(@PathVariable("id") int id, Model model) {
+		User user = googleOAuth.findById(id);
+		model.addAttribute("user", user);
+		return "home/page";
 	}
 
 }

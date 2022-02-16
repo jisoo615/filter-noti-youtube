@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -12,21 +13,21 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import com.example.notice.entity.User;
 import com.example.notice.google.dto.Channel;
 import com.example.notice.repository.UserRepository;
-import com.example.restaurant.naver.dto.SearchLocalRes;
-import com.fasterxml.jackson.databind.AnnotationIntrospector.ReferenceProperty.Type;
 
-import io.swagger.annotations.Info;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import springfox.documentation.spring.web.plugins.DefaultResponseTypeReader;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -80,14 +81,14 @@ public class GoogleOAuth {
 		user.setRefreshToken(res.getRefresh_token());
 		user.setAccessToken(res.getAccess_token());
 		user.setExpiresIn(Integer.parseInt(res.getExpires_in()));
-		
-		userRepo.save(user);
+
 		System.out.println(responseEntity.getStatusCode().toString());
-		
-		return user;
+		User newUser = getMyChannel(user);
+		userRepo.save(newUser);
+		return newUser;
 	}
 	
-	public void getMyChannel(User user) {
+	public User getMyChannel(User user) {
 		String uri = UriComponentsBuilder.fromUriString("https://www.googleapis.com/youtube/v3/channels")
 				.queryParam("part", "snippet")
 				.queryParam("mine", "true")
@@ -97,7 +98,33 @@ public class GoogleOAuth {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer "+user.getAccessToken());
 		var httpEntity = new HttpEntity<>(headers);
-		var responseType = new ParameterizedTypeReference<Channel>() {};
-		var responseEntity = new RestTemplate().exchange(uri, HttpMethod.POST, httpEntity, responseType);
+		var responseEntity = new RestTemplate().exchange(
+				uri, HttpMethod.GET, httpEntity, String.class);
+		// items.id, items.snippet.title 가져와야함
+		try {
+			JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+			JSONArray items = jsonObject.getJSONArray("items");
+			log.info("myChannel: {}", items.get(0));
+			JSONObject item = items.getJSONObject(0);
+			user.setChannelId(item.getString("id"));
+			log.info("id:{}", user.getChannelId());
+			user.setTitle(item.getJSONObject("snippet").getString("title"));
+			log.info("title:{}", user.getTitle());
+		} catch (JSONException e) {
+			log.info("my channel jsonObject parsing error");
+		}
+		return user;
+		
+	}
+	
+	public User findById(Integer id) {
+		if(userRepo.findById(id).isPresent()) {
+			return userRepo.findById(id).get();
+		}
+		else {
+			var user = new User();
+			user.setTitle("알수없는 이용자");
+			return user;
+		}
 	}
 }

@@ -35,6 +35,8 @@ dependencies {
 	//jsp
 	implementation('org.apache.tomcat.embed:tomcat-embed-jasper')
 	implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
+	//spring security
+	implementation('$boot:spring-boot-starter-security')
 }
 
 tasks.named('test') {
