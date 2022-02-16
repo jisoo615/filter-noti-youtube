@@ -17,6 +17,7 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+oldOAuth.file
 
 ### IntelliJ IDEA ###
 .idea
@@ -37,7 +38,6 @@ out/
 ### VS Code ###
 .vscode/
 
-application.yaml
 =======
 # Compiled class file
 *.class

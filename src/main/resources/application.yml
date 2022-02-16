@@ -1,0 +1,31 @@
+server:
+  port: 8088
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+    #swagger위한설정  pathmatch:  matching-strategy: ANT_PATH_MATCHER
+# MySQL Driver
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/filter_noti?useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+    username: developer
+# DB password
+    password: developer
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        # cammel case 사용시 필요한 설정
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        
+logging:
+  level:
+    org:
+      hibernate: 
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

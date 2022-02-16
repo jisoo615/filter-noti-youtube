@@ -31,12 +31,16 @@ dependencies {
 	//mysql
 	implementation 'mysql:mysql-connector-java'
 	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter - 버전오류로 spring.mvc.pathmatch.matching-strategy=ANT_PATH_MATCHER 어플리케이션 설정에 추가해줘야함
-	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
-	//jsp
+	//implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	//jsp jstl
 	implementation('org.apache.tomcat.embed:tomcat-embed-jasper')
 	implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
+	//mustache implementation('org.springframework.boot:spring-boot-starter-mustache')
+	
 	//spring security
-	implementation('$boot:spring-boot-starter-security')
+	implementation 'org.springframework.boot:spring-boot-starter-security:2.6.3'
+	testImplementation 'org.springframework.security:spring-security-test'
+	
 }
 
 tasks.named('test') {
