@@ -1,14 +1,17 @@
 package com.example.notice.controller;
-
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.notice.config.auth.PrincipalDetails;
 import com.example.notice.model.User;
 import com.example.notice.repository.UserRepository;
 
@@ -21,6 +24,27 @@ public class IndexConrtoller {
 	final private UserRepository userRepo;
 	final private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
+	@GetMapping("test/login")
+	public @ResponseBody String testLogin(
+			Authentication authentication, 
+			@AuthenticationPrincipal PrincipalDetails userDetails) {//DI
+		System.out.println("test/login===========================");
+		PrincipalDetails principalDetails =(PrincipalDetails) authentication.getPrincipal();
+		System.out.println("Authentication: "+principalDetails.getUser());
+		System.out.println("userDetails: "+userDetails.getUser());//@AuthenticationPrincipal로 세션확인 가능
+		return "세션 확인하기";
+	}
+	@GetMapping("test/oauth/login")
+	public @ResponseBody String testOAuthLogin(
+			Authentication authentication, 
+			@AuthenticationPrincipal OAuth2User oauth) {//DI
+		System.out.println("test/login===========================");
+		OAuth2User oAuth2User =(OAuth2User) authentication.getPrincipal();
+		System.out.println("Authentication: "+oAuth2User.getAttributes());
+		System.out.println("Authentication: "+oauth.getAttributes());
+		return "세션 확인하기";
+	}	
+	
 	@GetMapping({"/", ""})
 	public String index() {
 		//mustache 사용시 기본폴더=src/main/resources/
@@ -31,7 +55,10 @@ public class IndexConrtoller {
 	}
 	
 	@GetMapping("user")
-	public @ResponseBody String user() {
+	public @ResponseBody String user(
+			@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		System.out.println("PrincipalDetails: "+principalDetails.getUser());
+		System.out.println("attributes: "+principalDetails.getAttributes());
 		return "user";
 	}
 	@GetMapping("admin")

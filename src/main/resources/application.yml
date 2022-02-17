@@ -19,6 +19,16 @@ spring:
       naming:
         # cammel case 사용시 필요한 설정
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 244138234622-08q0k55k2valh0kreo99bb7oakgctg54.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - email
+            - profile
         
 logging:
   level:

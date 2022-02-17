@@ -2,12 +2,15 @@ package com.example.notice.config.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.example.notice.model.User;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /* 스프링시큐리티가 /login 주소요청오면 낚아채 로그인진행시고
@@ -17,12 +20,18 @@ import lombok.RequiredArgsConstructor;
  * Authentication객체 안에는 유저정보(ex.User)가 있어야 하는데 이는 UserDetails타입객체여야 한다. 
  * -- security session => Authentication => UserDetails
  * */
-public class PrincipalDetails implements UserDetails{
+@Data
+public class PrincipalDetails implements UserDetails, OAuth2User{
 	
 	private User user; //콤포지션: 상속의 문제피하기 위해 private 필드로 기존 클래스의 인스턴스를 참조하게함
+	private Map<String, Object> attributes;
 	
 	public PrincipalDetails(User user){
 		this.user = user;
+	}
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
 	}
 	
 	@Override  //해당 유저의 권한을 리턴함
@@ -62,6 +71,16 @@ public class PrincipalDetails implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {//oauth2User
+		return attributes;
+	}
+
+	@Override
+	public String getName() {//oauth2User
+		return null;
 	}
 	
 	

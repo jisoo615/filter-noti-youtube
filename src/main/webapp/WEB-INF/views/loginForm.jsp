@@ -10,7 +10,8 @@
 <form action="/login" method="POST">
 <input type="text" name="username" placeholder="UserName"/><br>
 <input type="password" name="password" placeholder="PassWord"/><br>
-<button>로그인</button>
+<button>로그인</button><br>
+<a href="/oauth2/authorization/google">구글로 로그인</button>
 </form>
 <a href="/joinForm">아직 회원가입을 안하셨나요?</a>
 </body>
