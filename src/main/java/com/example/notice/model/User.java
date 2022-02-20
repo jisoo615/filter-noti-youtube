@@ -1,6 +1,5 @@
 package com.example.notice.model;
 
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private String role;//ROLE_USER
+	private String role;//ROLE_USER, ROLE_BUSINESS, ROLE_ADMIN, ROLE_MANNAGER
 	@DateTimeFormat
 	private LocalDateTime createDate;
 	
