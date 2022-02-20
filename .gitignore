@@ -18,6 +18,8 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 oldOAuth.file
+applicaion.yaml
+applicaion.yml
 
 ### IntelliJ IDEA ###
 .idea
