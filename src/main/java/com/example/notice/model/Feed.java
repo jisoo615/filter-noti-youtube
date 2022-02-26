@@ -1,6 +1,6 @@
 package com.example.notice.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,16 +19,16 @@ public class Feed {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	int id;
 	String title;
-	String username;//해당 계정 유저 (의 페이지)
-	String writer;//글 작성자
+	String username;//글 작성자
+	String writer;//없애기
 	String content;// 글 내용
 	
 	@DateTimeFormat
-	private LocalDateTime createDate;
+	private Date createDate;
 	
 	@PrePersist
 	public void preCreate() {
-		this.createDate = LocalDateTime.now();
+		this.createDate = new Date();
 	}
 
 }

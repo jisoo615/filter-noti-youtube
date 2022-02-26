@@ -7,12 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.notice.config.auth.PrincipalDetails;
 import com.example.notice.model.User;
+import com.example.notice.repository.FeedRepository;
 import com.example.notice.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class IndexConrtoller {
 	final private UserRepository userRepo;
+	final private FeedRepository feedRepo;
 	final private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
 	@GetMapping("test/login")
@@ -46,11 +49,14 @@ public class IndexConrtoller {
 	}	
 	
 	@GetMapping({"/", ""})
-	public String index() {
+	public String index(Model model) {
 		//mustache 사용시 기본폴더=src/main/resources/
 		//prefix=templates, sufix=.mustache
 		//디펜던시 추가시 따로 설정 안해도됨
 		//지금은 jsp그대로 사용할거임
+		
+		model.addAttribute("feeds", feedRepo.findAll());
+		
 		return "index";
 	}
 	

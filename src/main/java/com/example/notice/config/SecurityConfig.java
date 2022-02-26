@@ -23,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	final private PrincipalOAuth2UserService principalOAuth2UserService;
 	
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();

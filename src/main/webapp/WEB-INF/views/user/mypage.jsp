@@ -10,6 +10,7 @@
 <body>
 <h2>마이 페이지</h2>
 내 아이디 : ${ username }<br>
+<a href="create">글쓰기</a>
 <h3>팔로우</h3>
 <table>
 <c:forEach var="follow" items="${follows}">
